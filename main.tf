@@ -7,13 +7,15 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "4.49.0"
+      version = "~>4.49.0"
     }
   }
+required_version = ">= 1.2.0"
 }
 
 provider "aws" {
-  region = "us-west-2"
+  profile = "ce-training"
+  region  = var.aws_region
 }
 
 module "vpc" {
@@ -39,7 +41,7 @@ module "ec2_instances" {
   count = 2
   name  = "my-ec2-cluster-${count.index}"
 
-  ami                    = "ami-0c5204531f799e0c6"
+  ami                    = "ami-0a242269c4b530c5e"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [module.vpc.default_security_group_id]
   subnet_id              = module.vpc.public_subnets[0]
@@ -53,7 +55,7 @@ module "ec2_instances" {
 module "website_s3_bucket" {
   source = "./modules/aws-s3-static-website-bucket"
 
-  bucket_name = "robin-test-dec-17-2019"
+  bucket_name = "Nic-test-2023-05-24"
 
   tags = {
     Terraform   = "true"
